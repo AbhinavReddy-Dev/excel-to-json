@@ -27,6 +27,7 @@ var storage = multer.diskStorage({
     );
   }
 });
+
 var upload = multer({
   //multer settings
   storage: storage,
@@ -42,6 +43,7 @@ var upload = multer({
     callback(null, true);
   }
 }).single("file");
+
 /** API path that will upload the files */
 app.post("/upload", function(req, res) {
   var exceltojson;
@@ -55,9 +57,7 @@ app.post("/upload", function(req, res) {
       res.json({ error_code: 1, err_desc: "No file passed" });
       return;
     }
-    /** Check the extension of the incoming file and
-     *  use the appropriate module
-     */
+    /** Check the extension of the incoming file */
     if (
       req.file.originalname.split(".")[
         req.file.originalname.split(".").length - 1
@@ -67,26 +67,24 @@ app.post("/upload", function(req, res) {
     } else {
       exceltojson = xlstojson;
     }
-    try {
-      exceltojson(
-        {
-          input: req.file.path,
-          output: null, //since we don't need output.json
-          lowerCaseHeaders: true
-        },
-        function(err, result) {
-          if (err) {
-            return res.json({ error_code: 1, err_desc: err, data: null });
-          }
-          res.json(result);
-          const jsonToTable = pasre;
+    exceltojson(
+      {
+        input: req.file.path,
+        output: "output.json", //else  "output.json"
+        lowerCaseHeaders: true
+      },
+      function(err, result) {
+        if (err) {
+          console.error(err);
+        } else {
+          console.log(result);
+          return res.json(result);
         }
-      );
-    } catch (e) {
-      res.json({ error_code: 1, err_desc: "Corupted excel file" });
-    }
+      }
+    );
   });
 });
+
 app.get("/", function(req, res) {
   res.sendFile(__dirname + "/index.html");
 });

@@ -48,7 +48,7 @@ app.get("/", function(req, res) {
 });
 
 /** API path that will upload the files */
-app.post("/upload", function(req, res) {
+app.post("/", function(req, res) {
   var exceltojson;
   upload(req, res, function(err) {
     if (err) {
@@ -73,7 +73,7 @@ app.post("/upload", function(req, res) {
     exceltojson(
       {
         input: req.file.path,
-        output: "output.json", //null else  "output.json"
+        output: "output.json", //null else  "output.json" to create a .json file in the directory
         lowerCaseHeaders: true
       },
       function(err, result) {
@@ -81,13 +81,12 @@ app.post("/upload", function(req, res) {
           console.error(err);
         } else {
           console.log(result);
-          res.json(result);
+          res.send(result);
           // return res.json(result);
         }
       }
     );
   });
-  app.redirect("/index.html");
 });
 
 app.listen("3000", function() {

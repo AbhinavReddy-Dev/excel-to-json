@@ -7,10 +7,10 @@
     <title>Document</title>
 
     <script type="text/javascript" src="jquery-1.7.1.min.js"></script>
-    <script>
+    <script type="text/javascript">
       function createTableFromJSON() {
         var url = "output.json";
-        $.getJSON(url, function(result) {
+        $.getJSON(url, function(data) {
           var col = [];
           for (var i = 0; i < result.length; i++) {
             for (var key in final[i]) {
@@ -19,21 +19,20 @@
               }
             }
           }
-
-          // CREATE TABLE
+          //Table creation
           var table = document.createElement("table");
 
-          // CREATE HTML TABLE HEADER ROW
+          // creating a HTML row
 
-          var tr = table.insertRow(-1); // TABLE ROW
-
+          var tr = table.insertRow(-1);
+          // table header
           for (var i = 0; i < col.length; i++) {
-            var th = document.createElement("th"); // TABLE HEADER
+            var th = document.createElement("th");
             th.innerHTML = col[i];
             tr.appendChild(th);
           }
 
-          // ADD JSON DATA TO THE TABLE AS ROWS
+          // getting json data
           for (var i = 0; i < result.length; i++) {
             tr = table.insertRow(-1);
 
@@ -54,18 +53,12 @@
   </head>
 
   <body>
-    <form
-      id="uploadForm"
-      enctype="multipart/form-data"
-      action="upload"
-      method="post"
-    >
+    <form id="uploadForm" enctype="multipart/form-data" action="" method="post">
       <input type="file" name="file" />Upload
       <input
         type="submit"
         value="upload"
         name="submit"
-        onload="createTableFronJSON()"
         onclick="createTableFromJSON()"
       />
     </form>
